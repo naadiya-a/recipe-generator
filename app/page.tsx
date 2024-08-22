@@ -1,10 +1,9 @@
-import Image from "next/image";
+import ChatWindow from "./chat-window";
 
 export default function Home() {
   return (
     <div>
-      <input type="text">
-      </input>
+      <ChatWindow/>
     </div>
   );
 }
