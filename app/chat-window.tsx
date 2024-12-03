@@ -6,6 +6,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { getAnswer } from "./actions/ai"
 
 export default function RecipeGenerator() {
   const [prompt, setPrompt] = useState("")
@@ -13,18 +14,15 @@ export default function RecipeGenerator() {
   const [isGenerating, setIsGenerating] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     setIsGenerating(true)
-    // Simulate AI generation with a timeout
-    setTimeout(() => {
-      setRecipe(`Here's a recipe for ${prompt}:\n\nIngredients:\n- 2 cups of imagination\n- 1 tablespoon of creativity\n- A pinch of AI magic\n\nInstructions:\n1. Mix imagination and creativity in a bowl.\n2. Sprinkle AI magic on top.\n3. Stir well and serve with a side of innovation.`)
-      setIsGenerating(false)
-    }, 2000)
+    const response = await getAnswer(prompt);
+    setRecipe(response.text);
+    setIsGenerating(false);
   }
 
   const handleSave = () => {
     console.log("Saving recipe:", recipe)
-    // Here you would typically implement the save functionality
     alert("Recipe saved! (Check console for details)")
   }
 
