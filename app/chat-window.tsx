@@ -27,40 +27,42 @@ export default function RecipeGenerator() {
   }
 
   return (
-    <div className="container mx-auto p-4 max-w-2xl">
+    <div className="min-h-screen flex flex-col p-4 items-center">
       <h1 className="text-2xl font-bold mb-4">AI Recipe Generator</h1>
-      <form onSubmit={handleSubmit} className="space-y-4 mb-4">
-        <div>
-          <Label htmlFor="prompt">What would you like to cook?</Label>
-          <Input
-            id="prompt"
-            value={prompt}
-            onChange={(e) => setPrompt(e.target.value)}
-            placeholder="Enter a dish or ingredients..."
-            required
-          />
-        </div>
-        <Button type="submit" disabled={isGenerating}>
-          {isGenerating ? "Generating..." : "Generate Recipe"}
-        </Button>
-      </form>
-      {recipe && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Generated Recipe</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Textarea
-              value={recipe}
-              readOnly
-              className="min-h-[200px]"
+      <div className="container mx-auto max-w-2xl flex-grow flex flex-col w-full">
+        <form onSubmit={handleSubmit} className="space-y-4 mb-4">
+          <div>
+            <Label htmlFor="prompt">What would you like to cook?</Label>
+            <Input
+              id="prompt"
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="Enter a dish or ingredients..."
+              required
             />
-          </CardContent>
-          <CardFooter>
-            <Button onClick={handleSave}>Save Recipe</Button>
-          </CardFooter>
-        </Card>
-      )}
+          </div>
+          <Button type="submit" disabled={isGenerating}>
+            {isGenerating ? "Generating..." : "Generate Recipe"}
+          </Button>
+        </form>
+        {recipe && (
+          <Card className="flex-grow flex flex-col">
+            <CardHeader>
+              <CardTitle>Generated Recipe</CardTitle>
+            </CardHeader>
+            <CardContent className="flex-grow flex">
+              <Textarea
+                value={recipe}
+                readOnly
+                className="flex-grow w-full resize-none"
+              />
+            </CardContent>
+            <CardFooter>
+              <Button onClick={handleSave}>Save Recipe</Button>
+            </CardFooter>
+          </Card>
+        )}
+      </div>
     </div>
   )
 }
