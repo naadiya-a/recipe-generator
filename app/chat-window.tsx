@@ -13,11 +13,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { getAnswer } from './actions/ai';
 import { Recipe } from '@/lib/types';
+import { insertRecipe } from '@/lib/db';
 
 export default function RecipeGenerator() {
   const [prompt, setPrompt] = useState('');
   const [recipe, setRecipe] = useState<Recipe>();
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,12 +28,18 @@ export default function RecipeGenerator() {
     const response = await getAnswer(prompt);
     setRecipe(response.object.recipe);
     setIsGenerating(false);
+    setIsSaved(false);
   };
 
-  const handleSave = () => {
-    console.log("Saving recipe:", recipe)
-    alert("Recipe saved! (Check console for details)")
-  }
+  const handleSave = async () => {
+    if (!recipe) {
+      throw new Error('Cannot save recipe: recipe is undefined');
+    }
+    setIsSaving(true);
+    await insertRecipe(recipe);
+    setIsSaving(false);
+    setIsSaved(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col p-4 items-center font-sans">
@@ -84,7 +93,9 @@ export default function RecipeGenerator() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button onClick={handleSave}>Save Recipe</Button>
+              <Button onClick={handleSave} disabled={isSaved || isSaving}>
+                {isSaved ? 'Saved!' : isSaving ? 'Saving...' : 'Save Recipe'}
+              </Button>
             </CardFooter>
           </Card>
         )}
