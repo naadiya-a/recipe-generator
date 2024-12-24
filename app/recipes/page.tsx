@@ -1,7 +1,6 @@
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { getRecipes } from "@/lib/db";
-import Link from 'next/link'
-
+import { Card, CardHeader, CardTitle } from '@/components/ui/card';
+import { getRecipes } from '@/data/db';
+import Link from 'next/link';
 
 export default async function RecipeCards() {
   const recipes = await getRecipes();
@@ -11,17 +10,13 @@ export default async function RecipeCards() {
       <h1 className="text-3xl font-bold mb-6 text-center">Recipe Collection</h1>
       <div className="space-y-4">
         {recipes.map((recipe) => (
-          <Link href={`/recipes/${recipe.id}`} >
-          <Card
-            key={recipe.id}
-            className="cursor-pointer hover:shadow-lg transition-shadow"
-            
-          >
-            <CardHeader>
-              <CardTitle>{recipe.name}</CardTitle>
-            </CardHeader>
-          </Card>
-            </Link>
+          <Link key={recipe.id} href={`/recipes/${recipe.id}`}>
+            <Card className="cursor-pointer hover:shadow-lg transition-shadow">
+              <CardHeader>
+                <CardTitle>{recipe.name}</CardTitle>
+              </CardHeader>
+            </Card>
+          </Link>
         ))}
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { getRecipe } from "@/lib/db";
+import { getRecipe } from '@/data/db';
 
 export default async function Page({
   params,

@@ -1,8 +1,9 @@
-'use server';
+'use server'
 
 import { generateObject } from 'ai';
 import { openai } from '@ai-sdk/openai';
 import z from 'zod';
+import isSignedIn from './auth';
 
 const SYSTEM_PROMPT = `
 You are a skilled home chef with a deep knowledge of global cuisines, specializing in creating recipes tailored to users' needs. 
@@ -24,6 +25,11 @@ When users request a specific cuisine, craft authentic recipes using culturally 
 `;
 
 export async function getAnswer(question: string) {
+  const signedIn = await isSignedIn();
+  if (!signedIn) {
+    throw new Error('Not signed in');
+  };
+
   const { object, finishReason, usage } = await generateObject({
     model: openai('gpt-3.5-turbo'),
     schema: z.object({

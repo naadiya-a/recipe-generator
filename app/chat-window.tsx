@@ -11,9 +11,9 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { getAnswer } from './actions/ai';
+import { getAnswer } from '@/data/ai';
 import { Recipe } from '@/lib/types';
-import { insertRecipe } from '@/lib/db';
+import { insertRecipe } from '@/data/db';
 
 export default function RecipeGenerator() {
   const [prompt, setPrompt] = useState('');

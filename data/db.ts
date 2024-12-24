@@ -1,12 +1,16 @@
-"use server";
+'use server'
 import postgres from "postgres";
-import { Recipe } from "./types";
+import { Recipe } from '../lib/types'
+import isSignedIn from "./auth";
 
 const sql = postgres(process.env.DATABASE_URL!, {
   ssl: { rejectUnauthorized: false },
 });
 
 export async function getUsers() {
+  const signedIn = await isSignedIn();
+  if (!signedIn) return;
+  
   const users = await sql`
     select
       name
@@ -16,6 +20,9 @@ export async function getUsers() {
 }
 
 export async function insertUser(name: string) {
+  const signedIn = await isSignedIn();
+  if (!signedIn) return;
+
   await sql`
     insert into users (name)
     values (${name})
@@ -23,6 +30,9 @@ export async function insertUser(name: string) {
 }
 
 export async function insertRecipe(recipe: Recipe) {
+  const signedIn = await isSignedIn();
+  if (!signedIn) return;
+
   const result = await sql`
     insert into recipes (name, ingredients, steps)
     values (
@@ -36,6 +46,9 @@ export async function insertRecipe(recipe: Recipe) {
 }
 
 export async function getRecipes() {
+  const signedIn = await isSignedIn();
+  if (!signedIn) return [];
+
   const result = await sql`
   select id, name
   from recipes
@@ -49,6 +62,9 @@ export async function getRecipes() {
 }
 
 export async function getRecipe(id: number) {
+  const signedIn = await isSignedIn();
+  if (!signedIn) return;
+
   const result = await sql`
   select id, name, ingredients, steps
   from recipes
