@@ -1,22 +1,17 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { getAnswer } from '@/data/ai';
-import { Recipe } from '@/lib/types';
-import { insertRecipe } from '@/data/db';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { CardFooter } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { getAnswer } from "@/data/ai";
+import { Recipe } from "@/lib/types";
+import { insertRecipe } from "@/data/db";
+import RecipeCard from "@/components/recipe-card";
 
 export default function RecipeGenerator() {
-  const [prompt, setPrompt] = useState('');
+  const [prompt, setPrompt] = useState("");
   const [recipe, setRecipe] = useState<Recipe>();
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -33,7 +28,7 @@ export default function RecipeGenerator() {
 
   const handleSave = async () => {
     if (!recipe) {
-      throw new Error('Cannot save recipe: recipe is undefined');
+      throw new Error("Cannot save recipe: recipe is undefined");
     }
     setIsSaving(true);
     await insertRecipe(recipe);
@@ -57,47 +52,17 @@ export default function RecipeGenerator() {
             />
           </div>
           <Button type="submit" disabled={isGenerating}>
-            {isGenerating ? 'Generating...' : 'Generate Recipe'}
+            {isGenerating ? "Generating..." : "Generate Recipe"}
           </Button>
         </form>
         {recipe && (
-          <Card className="flex-grow flex flex-col">
-            <CardHeader>
-              <CardTitle>Generated Recipe</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <div className="space-y-6">
-                <div>
-                  <h2 className="text-xl font-bold mb-4">{recipe.name}</h2>
-                </div>
-
-                <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold mb-3">Ingredients</h3>
-                  <ul className="list-disc pl-5 space-y-2">
-                    {recipe.ingredients.map((ingredient, idx) => (
-                      <li key={idx}>{ingredient}</li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="bg-muted/50 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold mb-3">Instructions</h3>
-                  <ol className="list-decimal pl-5 space-y-3 [&>li::marker]:text-foreground [&>li::marker]:font-normal">
-                    {recipe.steps.map((step, idx) => (
-                      <li key={idx} className="leading-relaxed">
-                        {step}
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </div>
-            </CardContent>
+          <RecipeCard recipe={recipe}>
             <CardFooter>
               <Button onClick={handleSave} disabled={isSaved || isSaving}>
-                {isSaved ? 'Saved!' : isSaving ? 'Saving...' : 'Save Recipe'}
+                {isSaved ? "Saved!" : isSaving ? "Saving..." : "Save Recipe"}
               </Button>
             </CardFooter>
-          </Card>
+          </RecipeCard>
         )}
       </div>
     </div>

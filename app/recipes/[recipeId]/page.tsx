@@ -1,4 +1,5 @@
-import { getRecipe } from '@/data/db';
+import RecipeCard from "@/components/recipe-card";
+import { getRecipe } from "@/data/db";
 
 export default async function Page({
   params,
@@ -8,5 +9,9 @@ export default async function Page({
   const slug = (await params).recipeId;
   const recipe = await getRecipe(Number(slug));
 
-  return <div>My Post: {JSON.stringify(recipe)}</div>;
+  return (
+    <div className="flex flex-col p-4 items-center font-sans max-w-2xl mx-auto flex-grow">
+      {recipe && <RecipeCard recipe={recipe} />}
+    </div>
+  );
 }
