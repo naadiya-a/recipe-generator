@@ -44,6 +44,7 @@ export default function RecipeGenerator() {
           <div>
             <Label htmlFor="prompt">What would you like to cook?</Label>
             <Input
+              className="bg-white"
               id="prompt"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
