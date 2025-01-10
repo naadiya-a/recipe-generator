@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-gray-100 to-white">
       <main className="container mx-auto px-6 py-12">
         <div className="flex flex-col lg:flex-row items-center justify-between gap-12 mb-16">
           <div className="flex flex-col items-center max-w-2xl mx-auto space-y-8">
@@ -18,7 +18,7 @@ export default function LandingPage() {
           </div>
           <div className="lg:w-1/2 flex justify-center">
             <Image
-              src="/squirrel-with-hat.jpeg"
+              src="/squirrel-with-hat.png"
               alt="Squirrel with an outreached arm"
               width={450}
               height={300}
