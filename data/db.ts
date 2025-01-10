@@ -1,7 +1,7 @@
-'use server'
+"use server";
 import postgres from "postgres";
-import { Recipe } from '../lib/types'
-import isSignedIn from "./auth";
+import { Recipe } from "../lib/types";
+import isSignedIn, { getCurrentUser } from "./auth";
 
 const sql = postgres(process.env.DATABASE_URL!, {
   ssl: { rejectUnauthorized: false },
@@ -10,7 +10,7 @@ const sql = postgres(process.env.DATABASE_URL!, {
 export async function getUsers() {
   const signedIn = await isSignedIn();
   if (!signedIn) return;
-  
+
   const users = await sql`
     select
       name
@@ -31,14 +31,17 @@ export async function insertUser(name: string) {
 
 export async function insertRecipe(recipe: Recipe) {
   const signedIn = await isSignedIn();
-  if (!signedIn) return;
+  const user = await getCurrentUser();
+
+  if (!signedIn || !user) return;
 
   const result = await sql`
-    insert into recipes (name, ingredients, steps)
+    insert into recipes (name, ingredients, steps, user_id)
     values (
       ${recipe.name},
       ${recipe.ingredients},
-      ${recipe.steps}
+      ${recipe.steps},
+      ${user.id}
     )
     returning id
   `;
@@ -47,11 +50,14 @@ export async function insertRecipe(recipe: Recipe) {
 
 export async function getRecipes() {
   const signedIn = await isSignedIn();
-  if (!signedIn) return [];
+  const user = await getCurrentUser();
+
+  if (!signedIn || !user) return [];
 
   const result = await sql`
   select id, name
   from recipes
+  where user_id = ${user.id}
   `;
 
   const recipes = result.map(({ id, name }) => ({
@@ -63,12 +69,14 @@ export async function getRecipes() {
 
 export async function getRecipe(id: number) {
   const signedIn = await isSignedIn();
-  if (!signedIn) return;
+  const user = await getCurrentUser();
+
+  if (!signedIn || !user) return;
 
   const result = await sql`
   select id, name, ingredients, steps
   from recipes
-  where id = ${id};
+  where id = ${id} and user_id = ${user.id};
   `;
   const recipe = {
     id: result[0].id,
