@@ -31,7 +31,7 @@ export async function getAnswer(question: string) {
   };
 
   const { object, finishReason, usage } = await generateObject({
-    model: openai('gpt-3.5-turbo'),
+    model: openai('gpt-4.1-mini'),
     schema: z.object({
       recipe: z.object({
         name: z.string(),
