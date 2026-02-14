@@ -22,6 +22,15 @@ When users request a specific cuisine, craft authentic recipes using culturally 
 - Write each step as a clear, direct instruction in the imperative mood (e.g., "Mix the flour with water," not "The flour is mixed with water."). 
 - Do not use numbers, bullet points, or prefixes.
 - Focus on clarity and brevity. Each step should tell the user **what action to take**.
+
+Return a single JSON object that matches this schema exactly:
+{
+  "recipe": {
+    "name": string,
+    "ingredients": string[],
+    "steps": string[]
+  }
+}
 `;
 
 export async function getAnswer(question: string) {
